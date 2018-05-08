@@ -1,3 +1,6 @@
+<!-- This tempalate is derived from Bootstrap -->
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,7 +11,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Stylish Portfolio - Start Bootstrap Template</title>
+    <title>Fun Qiz App</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -20,19 +23,6 @@
 
     <!-- Custom CSS -->
     <link href="css/stylish-portfolio.min.css" rel="stylesheet">
-
-    <!-- TEST -->
-    <title>Test HTML Location Functionality</title>
-    <script>
-      function getLocation() {
-        alert('getting location');
-        navigator.geolocation.getCurrentPosition(getPosition);
-      }
-      function getPosition(position) {
-        document.getElementById('showLocation').innerHTML = "Latitude: " + position.coords.latitude +
-        "<br>Longitude: " + position.coords.longitude;
-      }</script>
-
       <!-- the following links add the CSS and Javascript required for the Leaflet Map -->
       <link rel="stylesheet" href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css"
       integrity="sha512-wcw6ts8Anuw10Mzh9Ytw4pylW8+NAD4ch3lqm9lzAsTxg0GFeJgoAtxuCLREZSC5lUXdVyo/7yfsqFjQ4S+aKw=="crossorigin=""/>
@@ -88,6 +78,7 @@
       <div class="overlay"></div>
     </header>
 
+
     <!-- Track the location and load the map -->
     <section class="content-section bg-light" id="track">
       <div class="container text-center">
@@ -95,7 +86,7 @@
           <div class="col-lg-10 mx-auto">
             <h2>Start your great experience with an interactive map!</h2>
             <p class="lead mb-5">This app allows you to have fun while walking on the streets of London, just by a simple click you will find your current location as well as some interesting qiz for you. Enjoy your walk! 
-              <a href="https://unsplash.com/">Unsplash</a>!</p>
+            </br>
             <div id='showLocation'><h3 class="text-secondary mb-0">Find out where you are!</h3></div>
             </br>
             <button class="btn btn-primary btn-xl js-scroll-trigger" id="loadData" name="loadData" onclick="loadQuestionData()">Click here to answer the questions!</button>
@@ -107,12 +98,14 @@
       <div class="container vertical-center" id="mapid" style="width: 100%; height: 500px; z-index: 0"></div>
       </br>
       </br>
+      <!-- a button will remove the data layer -->
       <button class="btn btn-primary btn-xl js-scroll-trigger" id="removeQuestionData" name="removeQuestionData"
       onclick="removeQuestionData()">Click here to remove the questions!</button>
 
       
 
       <script>
+
       // load the map
       var mymap = L.map('mapid');
       // load the tiles
@@ -129,37 +122,40 @@
           alert(e.message);
         }
 
-        // get the function
+        // get the function of radius and alert
         mymap.on('locationfound', onLocationFound);
         mymap.on('locationerror', onLocationError);
+        // locate the user's location
         mymap.locate({setView: true, maxZoom: 25, watch: true});
 
         // create a variable for each of the layers we want to load/remove
-      var questionlayer;
-      // create a variable that will hold the XMLHttpRequest() - this must be done outside a function so that all the functions can use the same variable
-      var client;
-      var testMarkerRed = L.AwesomeMarkers.icon({icon: 'play',markerColor: 'red'});
-      var testMarkerPink = L.AwesomeMarkers.icon({icon: 'play',markerColor: 'pink'});
+        var questionlayer;
+        // create a variable that will hold the XMLHttpRequest() - this must be done outside a function so that all the functions can use the same variable
+        var client;
+        // varialbes for customized marker
+        var testMarkerRed = L.AwesomeMarkers.icon({icon: 'play',markerColor: 'red'});
+        var testMarkerPink = L.AwesomeMarkers.icon({icon: 'play',markerColor: 'pink'});
 
-      function loadQuestionData() {
-      // call the getEarthquakes code
-      // keep the alert message so that we know something is happening
-      alert("Loading Questions");
-      getData("questions");
-      }
 
-      // create the code to get the data using an XMLHttpRequest
-      function getData(layername) {
+        // call the getQuestions code
+        function loadQuestionData() {
+        getData("questions");}
+
+
+        // create the code to get the data using an XMLHttpRequest
+        function getData(layername) {
         client = new XMLHttpRequest();
         // depending on the layername we get different URLs
         var url;
         if (layername =="questions") {
           url = "http://developer.cege.ucl.ac.uk:30296/getPOI"
         }
+        // open up the url layer
         client.open('GET',url);
         client.onreadystatechange = dataResponse;
         client.send();
         }
+
         // create the code to wait for the response from the data server, and process the response once it is received
         function dataResponse() {
         // this function listens out for the server to say that the data is ready - i.e. has state 4
@@ -167,13 +163,12 @@
         // once the data is ready, process the data
         var geoJSONData = client.responseText;
         loadLayer(geoJSONData);
-        alert("dataResponse");
         }
         }
+
         // convert the received data - which is text - to JSON format and add it to the map
         function loadLayer(geoJSONData) {
         // which layer did we actually load?
-        alert("loaderlayerstart");
         if (geoJSONData.indexOf("question") > 0) {
           var loadingQuestions = true;
         }
@@ -181,39 +176,37 @@
         var json = JSON.parse(geoJSONData);
 
 
-
-
-        // add the JSON layer onto the map with
+        // add the JSON layer onto the map with custimized marker that can popup with qiz form and submit
         if (loadingQuestions === true){
           questionlayer = L.geoJson(json,{
             pointToLayer : function(feature,latlng){
                   // create popup contents
-                  var customPopup = "<h6>"+feature.properties.question+"</h6>"+"<b>"+"<input type='radio' name='answer' id = 'check1_true' style = 'margin-right: 5px;'/>"+"</b>"+"<b>"+feature.properties.answer1+"</b>"+"</br>"+"<b>"+"<input type='radio' name='answer' id = 'check2_true' style = 'margin-right: 5px;'/>"+"</b>"+"<b>"+feature.properties.answer2+"</b>"+"</br>"+"<b>"+"<input type='radio' name='answer' id = 'check3_true' style = 'margin-right: 5px;'/>"+"</b>"+"<b>"+feature.properties.answer3+"</b>"+"</br>"+"<b>"+"<input type='radio' name='answer' id = 'check4_true' style = 'margin-right: 5px;'/>"+"</b>"+"<b>"+feature.properties.answer4+"</b>"+"</br>"+"<button id='submit' name='submit' onclick='startDataUpload()'style= 'background-color: #008CBA;'>Submit</a>";
+                  var customPopup = "<h6>"+feature.properties.question+"</h6>"+"<b>"+"<input type='radio' name='answer' id = 'check1_true' style = 'margin-right: 5px;'/>"+"</b>"+"<b>"+feature.properties.answer1+"</b>"+"</br>"+"<b>"+"<input type='radio' name='answer' id = 'check2_true' style = 'margin-right: 5px;'/>"+"</b>"+"<b>"+feature.properties.answer2+"</b>"+"</br>"+"<b>"+"<input type='radio' name='answer' id = 'check3_true' style = 'margin-right: 5px;'/>"+"</b>"+"<b>"+feature.properties.answer3+"</b>"+"</br>"+"<b>"+"<input type='radio' name='answer' id = 'check4_true' style = 'margin-right: 5px;'/>"+"</b>"+"<b>"+feature.properties.answer4+"</b>"+"</br>"+"</br>"+"<label for='name'>Name</label><br /><input type='text' size='25' id='name' style = 'border: 1px solid black'/><br />"+"</br>"+"<label for='surname'>Surname</label><br /><input type='text' size='25' id='surname' style = 'border: 1px solid black'/><br />"+"</br>"+"<label for='module'>Module</label><br /><input type='text' size='25' id='module' style = 'border: 1px solid black'/><br />"+"</br>"+"<button id='submit' name='submit' onclick='qizDataUpload()'style= 'background-color: #008CBA;'>Submit</a>";
+
                   
                   // specify popup options 
                   var customOptions =
                   {'maxWidth': '500','className' : 'custom'}
 
-                  //
-                  if (feature.properties.answer_true != 'answer1') {
+                  // get the question popup
                     return L.marker(latlng, {icon:testMarkerPink}).bindPopup(customPopup,customOptions).openPopup();
                     mymap.on('locationfound', onLocationFound);
 
                     // get the user location on the question layer
                     mymap.on('locationerror', onLocationError);
                     mymap.locate({setView: true, maxZoom: 16, watch: true});
-                  }
                 }
               }).addTo(mymap);
                 mymap.fitBounds(questionlayer.getBounds());
               }
             }
 
-
+            // a function for remove the question layer
             function removeQuestionData() {
-              alert("Earthquake data will be removed");
+              alert("Questions will be removed.");
               mymap.removeLayer( questionlayer );
             }
+
             // specify the map auto popup with coordinates while click on it
             var popup = L.popup();
 
@@ -221,9 +214,10 @@
             function onMapClick(e) {
               popup
               .setLatLng(e.latlng)
-              .setContent("You clicked the map at " + e.latlng.toString())
+              .setContent("You clicked the map at" + "</br>" + e.latlng.toString())
               .openOn(mymap);
             }
+            //click on map it will show the coordinates
             mymap.on('click', onMapClick);
 
             </script>
@@ -272,7 +266,7 @@
             <h4>
               <strong>Redesigned</strong>
             </h4>
-            <p class="text-faded mb-0">Freshly redesigned for Bootstrap 4.</p>
+            <p class="text-faded mb-0">Freshly redesigned.</p>
           </div>
           <div class="col-lg-3 col-md-6 mb-5 mb-md-0">
             <span class="service-icon rounded-circle mx-auto mb-3">
@@ -283,7 +277,7 @@
             </h4>
             <p class="text-faded mb-0">Millions of users
               <i class="fa fa-heart"></i>
-              Start Bootstrap!</p>
+              Start Qiz App!</p>
           </div>
           <div class="col-lg-3 col-md-6">
             <span class="service-icon rounded-circle mx-auto mb-3">
@@ -303,17 +297,17 @@
       <div class="container">
         <ul class="list-inline mb-5">
           <li class="list-inline-item">
-            <a class="social-link rounded-circle text-white mr-3" href="#">
+            <a class="social-link rounded-circle text-white mr-3" href="https://www.facebook.com/uclofficial/">
               <i class="icon-social-facebook"></i>
             </a>
           </li>
           <li class="list-inline-item">
-            <a class="social-link rounded-circle text-white mr-3" href="#">
+            <a class="social-link rounded-circle text-white mr-3" href="https://twitter.com/ucl">
               <i class="icon-social-twitter"></i>
             </a>
           </li>
           <li class="list-inline-item">
-            <a class="social-link rounded-circle text-white" href="#">
+            <a class="social-link rounded-circle text-white" href="https://github.com/uceschs">
               <i class="icon-social-github"></i>
             </a>
           </li>
