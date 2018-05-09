@@ -1,0 +1,404 @@
+<!-- This tempalate is provided by Bootstrap -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Fun Qiz App</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/stylish-portfolio.min.css" rel="stylesheet">
+      <!-- the following links add the CSS and Javascript required for the Leaflet Map -->
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css"
+      integrity="sha512-wcw6ts8Anuw10Mzh9Ytw4pylW8+NAD4ch3lqm9lzAsTxg0GFeJgoAtxuCLREZSC5lUXdVyo/7yfsqFjQ4S+aKw=="crossorigin=""/>
+      <script src="https://unpkg.com/leaflet@1.1.0/dist/leaflet.js"
+      integrity="sha512-mNqn2Wg7tSToJhvHcqfzLMU6J4mkOImSPTxVZAdo+lcPlk+GhZmYgACEe0x35K7YzW1zJ7XyJV/TT1MrdXvMcA=="crossorigin=""></script>
+      <!-- the following CSS is used to set the size of the Map -->
+      <style type="text/css"> #mapid { height: 500px; width: 700px; }</style>
+      <!-- the following links incorporate the CSS required for custom icon creation -->
+      <link rel="stylesheet" href="ionicons.min.css">
+      <link rel="stylesheet" href="leaflet.awesome-markers.css">
+      <script src="leaflet.awesome-markers.js"></script>
+
+
+  </head>
+
+  <body id="page-top">
+
+    <!-- Navigation features for go to sections-->
+    <a class="menu-toggle rounded" href="#">
+      <i class="fa fa-bars"></i>
+    </a>
+    <nav id="sidebar-wrapper">
+      <ul class="sidebar-nav">
+        <li class="sidebar-brand">
+          <a class="js-scroll-trigger" href="#page-top">Start Qiz App</a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a class="js-scroll-trigger" href="#page-top">Home</a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a class="js-scroll-trigger" href="#track">Get your location!</a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a class="js-scroll-trigger" href="" onclick="removeQuestionData()">Remove the questions! </a>
+        </li>
+          <li class="sidebar-nav-item">
+          <a class="js-scroll-trigger" href="#about">Help</a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a class="js-scroll-trigger" href="#contact">Contact</a>
+        </li>
+      </ul>
+    </nav>
+
+
+    <!-- The header -->
+    <header class="masthead d-flex">
+      <div class="container text-center my-auto">
+        <h1 class="mb-1">The Qiz APP</h1>
+        <h3 class="mb-5">
+          <em>Having fun with your journey!</em>
+        </h3>
+        <a class="btn btn-primary btn-xl js-scroll-trigger" href="#track">Track your location</a>
+      </div>
+      <div class="overlay"></div>
+    </header>
+
+
+    <!-- Track the location and load the map -->
+    <section class="content-section bg-light" id="track">
+      <div class="container text-center">
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            <h2>Start your great experience with an interactive map!</h2>
+            <p class="lead mb-5">This app allows you to have fun while walking on the streets of London, just by a simple click you will find your current location as well as some interesting qiz for you. Enjoy your walk! 
+            </br>
+            <div id='showLocation'><h3 class="text-secondary mb-0">Find out where you are!</h3></div>
+            </br>
+            <button class="btn btn-primary btn-xl js-scroll-trigger" id="loadData" name="loadData" onclick="loadQuestionData()">Click here to answer the questions!</button>
+          </br>
+      </br>
+
+
+      <!-- The mapid div will hold the map -->
+      <div class="container vertical-center" id="mapid" style="width: 100%; height: 500px; z-index: 0"></div>
+      </br>
+      </br>
+      <!-- A button will remove the data layer -->
+      <button class="btn btn-primary btn-xl js-scroll-trigger" id="removeQuestionData" name="removeQuestionData"
+      onclick="removeQuestionData()">Click here to remove the questions!</button>
+
+      
+
+      <script>
+
+      // load the map
+      var mymap = L.map('mapid');
+      // load the tiles
+      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {maxZoom: 18,attribution: 'Map data &copy; <ahref="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>,' +'Imagery © <a href="http://mapbox.com">Mapbox</a>',id: 'mapbox.streets'}).addTo(mymap);
+
+        // a function that can get the radius from after locate the user's location
+        function onLocationFound(e) {
+        var radius = 100;
+        L.marker(e.latlng).addTo(mymap).bindPopup("The questions that's within " + radius + " meters from you!").openPopup();
+        L.circle(e.latlng, radius).addTo(mymap);}
+
+        //an alert in case can't locate
+        function onLocationError(e) {
+          alert(e.message);
+        }
+
+        // get the function of radius and alert
+        mymap.on('locationfound', onLocationFound);
+        mymap.on('locationerror', onLocationError);
+        // locate the user's location
+        mymap.locate({setView: true, maxZoom: 25, watch: true});
+
+        // create a variable for each of the layers we want to load/remove
+        var questionlayer;
+        // create a variable that will hold the XMLHttpRequest() - this must be done outside a function so that all the functions can use the same variable
+        var client;
+        // varialbes for customized marker
+        var testMarkerRed = L.AwesomeMarkers.icon({icon: 'play',markerColor: 'red'});
+        var testMarkerPink = L.AwesomeMarkers.icon({icon: 'play',markerColor: 'pink'});
+
+
+        // call the getQuestions code
+        function loadQuestionData() {
+        getData("questions");}
+
+
+        // create the code to get the data using an XMLHttpRequest
+        function getData(layername) {
+        client = new XMLHttpRequest();
+        // depending on the layername we get different URLs
+        var url;
+        if (layername =="questions") {
+          url = "http://developer.cege.ucl.ac.uk:30296/getPOI"
+        }
+        // open up the url layer
+        client.open('GET',url);
+        client.onreadystatechange = dataResponse;
+        client.send();
+        }
+
+        // create the code to wait for the response from the data server, and process the response once it is received
+        function dataResponse() {
+        // this function listens out for the server to say that the data is ready - i.e. has state 4
+        if (client.readyState == 4) {
+        // once the data is ready, process the data
+        var geoJSONData = client.responseText;
+        loadLayer(geoJSONData);
+        }
+        }
+
+        // convert the received data - which is text - to JSON format and add it to the map
+        function loadLayer(geoJSONData) {
+        // which layer did we actually load?
+        if (geoJSONData.indexOf("question") > 0) {
+          var loadingQuestions = true;
+        }
+        // convert the text to JSON
+        var json = JSON.parse(geoJSONData);
+
+
+        // add the JSON layer onto the map with custimized marker that can popup with qiz form and submit
+        if (loadingQuestions === true){
+          questionlayer = L.geoJson(json,{
+            pointToLayer : function(feature,latlng){
+
+              var question = feature.properties.question
+                  // create popup contents
+                  var customPopup = "<h6>"+feature.properties.question+"</h6>"+"<b>"+"<input type='radio' name='answer' id = 'answer_1' style = 'margin-right: 5px;'/>"+"</b>"+"<b>"+feature.properties.answer1+"</b>"+"</br>"+"<b>"+"<input type='radio' name='answer' id = 'answer_2' style = 'margin-right: 5px;'/>"+"</b>"+"<b>"+feature.properties.answer2+"</b>"+"</br>"+"<b>"+"<input type='radio' name='answer' id = 'answr_3' style = 'margin-right: 5px;'/>"+"</b>"+"<b>"+feature.properties.answer3+"</b>"+"</br>"+"<b>"+"<input type='radio' name='answer' id = 'answer_4' style = 'margin-right: 5px;'/>"+"</b>"+"<b>"+feature.properties.answer4+"</b>"+"</br>"+"</br>"+"<label for='name'>Name</label><br /><input type='text' size='25' id='name' style = 'border: 1px solid black'/><br />"+"</br>"+"<label for='surname'>Surname</label><br /><input type='text' size='25' id='surname' style = 'border: 1px solid black'/><br />"+"</br>"+"<label for='module'>Module</label><br /><input type='text' size='25' id='module' style = 'border: 1px solid black'/><br />"+"</br>"+"<button id='submit' name='submit' onclick='qizDataUpload()'style= 'background-color: #008CBA;'>Submit</a>";
+
+
+                  // specify popup options 
+                  var customOptions ={'maxWidth': '500','className' : 'custom'}
+                  
+
+                  
+
+                  // get the question popup
+                  return L.marker(latlng, {icon:testMarkerPink}).bindPopup(customPopup,customOptions).openPopup();
+                  mymap.on('locationfound', onLocationFound);
+                }
+              }).addTo(mymap);
+                mymap.fitBounds(questionlayer.getBounds());
+              }
+            }
+
+                getLocation();
+                  function getLocation() {
+                    alert('Allow us to get your location?');
+                    navigator.geolocation.getCurrentPosition(getPosition);
+                  }
+
+                  function getPosition(position){
+                 // get the user location on the question layer
+                 L.marker([position.coords.latitude,position.coords.longitude]).addTo(mymap).bindPopup("This is your position: "+"("+position.coords.latitude + "," + position.coords.longitude + ")").openPopup();
+                   mymap.setView([position.coords.latitude,position.coords.longitude]);
+
+                  }
+            
+
+            // a function for remove the question layer
+            function removeQuestionData() {
+              alert("Questions will be removed.");
+              mymap.removeLayer( questionlayer );
+            }
+
+            // specify the map auto popup with coordinates while click on it
+            var popup = L.popup();
+
+            // a function for click on the map and popup coordinates
+            function onMapClick(e) {
+              popup
+              .setLatLng(e.latlng)
+              .setContent("You clicked the map at" + "</br>" + e.latlng.toString())
+              .openOn(mymap);
+            }
+            //click on map it will show the coordinates
+            mymap.on('click', onMapClick);
+
+            </script>
+          </div>
+        </div>
+      </div>
+    </section>
+
+     <section id="about">
+          <div class="bg-light container text-center">
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            </br>
+            </br>
+            </br>
+            </br>
+            <h1>USER GUIDE</h1>
+            </br>
+            <p class="lead mb-5">Functions for this app</p>
+            </br>
+            <li>You will find a navigator on top of the app, it will guide you to each section that you want!</li>
+             </br>
+            <img src="img/qiz1.png" alt="Qiz 1" style="width: 60%; height: 60%"/>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="bg-light container text-center">
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            </br>
+            </br>
+            </br>
+            </br>
+            </br>
+            <li>You will find a navigator on top of the app, it will guide you to each section that you want!</li>
+             </br>
+            <img src="img/qiz2.png" alt="Qiz 2" style="width: 60%; height: 70%"/>
+          </div>
+        </div>
+      </div>
+
+
+            <div class="bg-light container text-center">
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            </br>
+            </br>
+            </br>
+            </br>
+            <li>You will get a button that can click and bring to where you are and start playing the qiz!</li>
+             </br>
+            <img src="img/qiz3.png" alt="Qiz 3" style="width: 60%; height: 70%"/>
+          </div>
+        </div>
+      </div>
+
+            <div class="bg-light container text-center">
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            </br>
+            </br>
+            </br>
+            <li>The map will automatically show you where you are and the area that's 100 meters radius from you.</li>
+             </br>
+            <img src="img/qiz4.png" alt="Qiz 4" style="width: 60%; height: 70%"/>
+          </div>
+        </div>
+      </div>
+
+            <div class="bg-light container text-center">
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            </br>
+            </br>
+            <li>There's a button under the map that can use to remove the questions and start over again.</li>
+             </br>
+            <img src="img/qiz5.png" alt="Qiz 5" style="width: 60%; height: 70%"/>
+          </div>
+        </div>
+      </div>
+
+            <div class="bg-light container text-center">
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            </br>
+            </br>
+            <li>Question will popup and then you would also be able to click on the map and find any location coordinates that you want!</li>
+             </br>
+            <img src="img/qiz6.png" alt="Qiz 6" style="width: 60%; height: 70%"/>
+          </div>
+        </div>
+      </div>
+
+
+            <div class="bg-light container text-center">
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            </br>
+            </br>
+            <li>Button above the map will need to be clicked to start playing the qiz.</li>
+             </br>
+            <img src="img/qiz7.png" alt="Qiz 7" style="width: 60%; height: 70%"/>
+          </div>
+        </div>
+      </div>
+
+
+            <div class="bg-light container text-center">
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            </br>
+            </br>
+            <li>You will be able to click on the icon to answer the questions and submit it with your personal info.</li>
+            <img src="img/qiz8.png" alt="Qiz 8" style="width: 60%; height: 70%"/>
+          </div>
+        </div>
+      </div>
+      </section>
+
+
+
+    <!-- Footer-->
+    <footer class="footer text-center" id="contact">
+      <div class="container">
+        <ul class="list-inline mb-5">
+          <li class="list-inline-item">
+            <a class="social-link rounded-circle text-white mr-3" href="https://www.facebook.com/uclofficial/">
+              <i class="icon-social-facebook"></i>
+            </a>
+          </li>
+          <li class="list-inline-item">
+            <a class="social-link rounded-circle text-white mr-3" href="https://twitter.com/ucl">
+              <i class="icon-social-twitter"></i>
+            </a>
+          </li>
+          <li class="list-inline-item">
+            <a class="social-link rounded-circle text-white" href="https://github.com/uceschs">
+              <i class="icon-social-github"></i>
+            </a>
+          </li>
+        </ul>
+        <p class="text-muted small mb-0">Copyright &copy; Your Website 2017</p>
+      </div>
+    </footer>
+
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded js-scroll-trigger" href="#page-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="js/stylish-portfolio.min.js"></script>
+    <script src="leaflet.awesome-markers.js"></script>
+    <script src="js/uploadQizData.js"></script>
+
+  </body>
+
+</html>
