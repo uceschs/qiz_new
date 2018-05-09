@@ -1,4 +1,4 @@
-<!-- This tempalate is derived from Bootstrap -->
+<!-- This tempalate is provided by Bootstrap -->
 
 
 <!DOCTYPE html>
@@ -39,7 +39,8 @@
   </head>
 
   <body id="page-top">
-    <!-- Navigation -->
+
+    <!-- Navigation features for go to sections-->
     <a class="menu-toggle rounded" href="#">
       <i class="fa fa-bars"></i>
     </a>
@@ -66,7 +67,8 @@
       </ul>
     </nav>
 
-    <!-- Header -->
+
+    <!-- The header -->
     <header class="masthead d-flex">
       <div class="container text-center my-auto">
         <h1 class="mb-1">The Qiz APP</h1>
@@ -94,11 +96,11 @@
       </br>
 
 
-      <!-- the mapid div will hold the map -->
+      <!-- The mapid div will hold the map -->
       <div class="container vertical-center" id="mapid" style="width: 100%; height: 500px; z-index: 0"></div>
       </br>
       </br>
-      <!-- a button will remove the data layer -->
+      <!-- A button will remove the data layer -->
       <button class="btn btn-primary btn-xl js-scroll-trigger" id="removeQuestionData" name="removeQuestionData"
       onclick="removeQuestionData()">Click here to remove the questions!</button>
 
@@ -183,7 +185,6 @@
                   // create popup contents
                   var customPopup = "<h6>"+feature.properties.question+"</h6>"+"<b>"+"<input type='radio' name='answer' id = 'answer_1' style = 'margin-right: 5px;'/>"+"</b>"+"<b>"+feature.properties.answer1+"</b>"+"</br>"+"<b>"+"<input type='radio' name='answer' id = 'answer_2' style = 'margin-right: 5px;'/>"+"</b>"+"<b>"+feature.properties.answer2+"</b>"+"</br>"+"<b>"+"<input type='radio' name='answer' id = 'answr_3' style = 'margin-right: 5px;'/>"+"</b>"+"<b>"+feature.properties.answer3+"</b>"+"</br>"+"<b>"+"<input type='radio' name='answer' id = 'answer_4' style = 'margin-right: 5px;'/>"+"</b>"+"<b>"+feature.properties.answer4+"</b>"+"</br>"+"</br>"+"<label for='name'>Name</label><br /><input type='text' size='25' id='name' style = 'border: 1px solid black'/><br />"+"</br>"+"<label for='surname'>Surname</label><br /><input type='text' size='25' id='surname' style = 'border: 1px solid black'/><br />"+"</br>"+"<label for='module'>Module</label><br /><input type='text' size='25' id='module' style = 'border: 1px solid black'/><br />"+"</br>"+"<button id='submit' name='submit' onclick='qizDataUpload()'style= 'background-color: #008CBA;'>Submit</a>";
 
-                  //if (feature.properties.answer_true == 
                   
                   // specify popup options 
                   var customOptions =
@@ -228,7 +229,7 @@
     </section>
 
 
-    <!-- Help -->
+    <!-- Help Section-->
     <section class="masthead d-flex" id="about">
       <div class="container text-center">
         <div class="row">
@@ -243,7 +244,7 @@
     </section>
 
 
-    <!-- Footer -->
+    <!-- Footer-->
     <footer class="footer text-center" id="contact">
       <div class="container">
         <ul class="list-inline mb-5">

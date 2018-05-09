@@ -89,36 +89,6 @@ app.post('/uploadData', function(req,res) {
 
 
 
-  
-app.get('/getGeoJSONfile',function(req,res){
-	console.log("connecting server and query required data");
-	pool.connect(function(err,client,done){
-		if (err){
-			console.log("not be able to get connection "+ err);
-			res.status(400).send(err);
-		}
-		// use the inbuilt geoJSON functionality
-		// add create the required geoJSON format using a query adapted from here: http://www.posgresonline.com/journal.com/journal/archives/267-Creating-GeoJSON-Feature-Collections-with-JSON-and-PostGIS-functions.html,
-		// accessed 4th January 2018
-		// note that query needs to be a single string with no line breaks so built it up bit by bit
-		var querystring = "SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ";
-		querystring = querystring + "(SELECT 'Feature' As type, ST_AsGeoJSON(lg.geom)::json As geometry,";
-		querystring = querystring + " row_to_json((SELECT l FROM (SELECT id, name, category) As l )) As properties";
-		querystring = querystring + " FROM app_questions As lg) As f";
-		console.log(querystring);
-		client.query(querystring,function(err,result){
-			//call done() to release the client back to the pool
-			done();
-			if (err){
-				console.log(err);
-				res.status(400).send(err);
-			}
-			console.log(result)
-			res.status(200).send(result.rows);
-		});
-	});
-});
-
 
 app.get('/getPOI', function (req,res) {
      pool.connect(function(err,client,done) {
@@ -131,7 +101,7 @@ app.get('/getPOI', function (req,res) {
         // note that query needs to be a single string with no line breaks so builtit up bit by bit
              var querystring = " SELECT 'FeatureCollection' As type,array_to_json(array_agg(f)) As features  FROM ";
              querystring = querystring + "(SELECT 'Feature' As type,ST_AsGeoJSON(lg.geom)::json As geometry, ";
-             querystring = querystring + "row_to_json((SELECT l FROM (SELECT name, surname, module, question, answer1, answer2, answer3, answer4, answer_true) As l)) As properties";
+             querystring = querystring + "row_to_json((SELECT l FROM (SELECT question, answer1, answer2, answer3, answer4, answer_true) As l)) As properties";
              querystring = querystring + "   FROM app_questions  As lg limit 100) As f ";
              console.log(querystring);
              client.query(querystring,function(err,result){
