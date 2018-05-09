@@ -182,26 +182,40 @@
         if (loadingQuestions === true){
           questionlayer = L.geoJson(json,{
             pointToLayer : function(feature,latlng){
+
+              var question = feature.properties.question
                   // create popup contents
                   var customPopup = "<h6>"+feature.properties.question+"</h6>"+"<b>"+"<input type='radio' name='answer' id = 'answer_1' style = 'margin-right: 5px;'/>"+"</b>"+"<b>"+feature.properties.answer1+"</b>"+"</br>"+"<b>"+"<input type='radio' name='answer' id = 'answer_2' style = 'margin-right: 5px;'/>"+"</b>"+"<b>"+feature.properties.answer2+"</b>"+"</br>"+"<b>"+"<input type='radio' name='answer' id = 'answr_3' style = 'margin-right: 5px;'/>"+"</b>"+"<b>"+feature.properties.answer3+"</b>"+"</br>"+"<b>"+"<input type='radio' name='answer' id = 'answer_4' style = 'margin-right: 5px;'/>"+"</b>"+"<b>"+feature.properties.answer4+"</b>"+"</br>"+"</br>"+"<label for='name'>Name</label><br /><input type='text' size='25' id='name' style = 'border: 1px solid black'/><br />"+"</br>"+"<label for='surname'>Surname</label><br /><input type='text' size='25' id='surname' style = 'border: 1px solid black'/><br />"+"</br>"+"<label for='module'>Module</label><br /><input type='text' size='25' id='module' style = 'border: 1px solid black'/><br />"+"</br>"+"<button id='submit' name='submit' onclick='qizDataUpload()'style= 'background-color: #008CBA;'>Submit</a>";
 
-                  
+
                   // specify popup options 
-                  var customOptions =
-                  {'maxWidth': '500','className' : 'custom'}
+                  var customOptions ={'maxWidth': '500','className' : 'custom'}
+                  
+
+                  
 
                   // get the question popup
-                    return L.marker(latlng, {icon:testMarkerPink}).bindPopup(customPopup,customOptions).openPopup();
-                    mymap.on('locationfound', onLocationFound);
-
-                    // get the user location on the question layer
-                    mymap.on('locationerror', onLocationError);
-                    mymap.locate({setView: true, maxZoom: 16, watch: true});
+                  return L.marker(latlng, {icon:testMarkerPink}).bindPopup(customPopup,customOptions).openPopup();
+                  mymap.on('locationfound', onLocationFound);
                 }
               }).addTo(mymap);
                 mymap.fitBounds(questionlayer.getBounds());
               }
             }
+
+                getLocation();
+                  function getLocation() {
+                    alert('Allow us to get your location?');
+                    navigator.geolocation.getCurrentPosition(getPosition);
+                  }
+
+                  function getPosition(position){
+                 // get the user location on the question layer
+                 L.marker([position.coords.latitude,position.coords.longitude]).addTo(mymap).bindPopup("This is your position: "+"("+position.coords.latitude + "," + position.coords.longitude + ")").openPopup();
+                   mymap.setView([position.coords.latitude,position.coords.longitude]);
+
+                  }
+            
 
             // a function for remove the question layer
             function removeQuestionData() {
@@ -228,20 +242,119 @@
       </div>
     </section>
 
-
-    <!-- Help Section-->
-    <section class="masthead d-flex" id="about">
-      <div class="container text-center">
+     <section id="about">
+          <div class="bg-light container text-center">
         <div class="row">
           <div class="col-lg-10 mx-auto">
-            <h2>Get some help with this button!</h2>
-          </br>
-          </br>
-            <a class="btn btn-dark btn-xl js-scroll-trigger" href="http://developer.cege.ucl.ac.uk:31296/help.html">Need some help?</a>
+            </br>
+            </br>
+            </br>
+            </br>
+            <h1>USER GUIDE</h1>
+            </br>
+            <p class="lead mb-5">Functions for this app</p>
+            </br>
+            <li>You will find a navigator on top of the app, it will guide you to each section that you want!</li>
+             </br>
+            <img src="img/qiz1.png" alt="Qiz 1" style="width: 60%; height: 60%"/>
           </div>
         </div>
       </div>
-    </section>
+
+
+      <div class="bg-light container text-center">
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            </br>
+            </br>
+            </br>
+            </br>
+            </br>
+            <li>You will find a navigator on top of the app, it will guide you to each section that you want!</li>
+             </br>
+            <img src="img/qiz2.png" alt="Qiz 2" style="width: 60%; height: 70%"/>
+          </div>
+        </div>
+      </div>
+
+
+            <div class="bg-light container text-center">
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            </br>
+            </br>
+            </br>
+            </br>
+            <li>You will get a button that can click and bring to where you are and start playing the qiz!</li>
+             </br>
+            <img src="img/qiz3.png" alt="Qiz 3" style="width: 60%; height: 70%"/>
+          </div>
+        </div>
+      </div>
+
+            <div class="bg-light container text-center">
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            </br>
+            </br>
+            </br>
+            <li>The map will automatically show you where you are and the area that's 100 meters radius from you.</li>
+             </br>
+            <img src="img/qiz4.png" alt="Qiz 4" style="width: 60%; height: 70%"/>
+          </div>
+        </div>
+      </div>
+
+            <div class="bg-light container text-center">
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            </br>
+            </br>
+            <li>There's a button under the map that can use to remove the questions and start over again.</li>
+             </br>
+            <img src="img/qiz5.png" alt="Qiz 5" style="width: 60%; height: 70%"/>
+          </div>
+        </div>
+      </div>
+
+            <div class="bg-light container text-center">
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            </br>
+            </br>
+            <li>Question will popup and then you would also be able to click on the map and find any location coordinates that you want!</li>
+             </br>
+            <img src="img/qiz6.png" alt="Qiz 6" style="width: 60%; height: 70%"/>
+          </div>
+        </div>
+      </div>
+
+
+            <div class="bg-light container text-center">
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            </br>
+            </br>
+            <li>Button above the map will need to be clicked to start playing the qiz.</li>
+             </br>
+            <img src="img/qiz7.png" alt="Qiz 7" style="width: 60%; height: 70%"/>
+          </div>
+        </div>
+      </div>
+
+
+            <div class="bg-light container text-center">
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            </br>
+            </br>
+            <li>You will be able to click on the icon to answer the questions and submit it with your personal info.</li>
+            <img src="img/qiz8.png" alt="Qiz 8" style="width: 60%; height: 70%"/>
+          </div>
+        </div>
+      </div>
+      </section>
+
 
 
     <!-- Footer-->
@@ -284,6 +397,7 @@
     <!-- Custom scripts for this template -->
     <script src="js/stylish-portfolio.min.js"></script>
     <script src="leaflet.awesome-markers.js"></script>
+    <script src="js/uploadQizData.js"></script>
 
   </body>
 

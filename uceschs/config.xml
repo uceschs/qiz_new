@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="QizApp" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
-    <name>helloworld</name>
+    <name>The Qiz App</name>
     <description>
-        Hello World sample application that responds to the deviceready event.
+        The Qiz App is an app for map interation qiz game, it allows to tracked to get the nearest qiz you have near you.
     </description>
-    <author email="support@phonegap.com" href="http://phonegap.com">
-        PhoneGap Team
+    <author email="uceschs@ucl.ac.uk" href="https://github.com/uceschs">
+        Chiao Ju, Hsueh
     </author>
     <content src="index.html" />
     <preference name="DisallowOverscroll" value="true" />
