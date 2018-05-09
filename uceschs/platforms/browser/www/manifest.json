@@ -1,11 +1,11 @@
 {
   "background_color": "#FFF",
   "display": "standalone",
-  "name": "helloworld",
-  "short_name": "helloworld",
+  "name": "The Qiz App",
+  "short_name": "The Qiz App",
   "version": "QizApp",
-  "description": "Hello World sample application that responds to the deviceready event.",
-  "author": "PhoneGap Team",
+  "description": "The Qiz App is an app for map interation qiz game, it allows to tracked to get the nearest qiz you have near you.",
+  "author": "Chiao Ju, Hsueh",
   "icons": [],
   "start_url": "index.html"
 }
